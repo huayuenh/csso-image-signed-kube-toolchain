@@ -9,10 +9,10 @@ cat build.properties
 ibmcloud login --apikey "$IBM_CLOUD_API_KEY" -r "$IBMCLOUD_TARGET_REGION";
 
 #target registry region
-ibmcloud target -r $REGISTRY_REGION
+ibmcloud target -r ${REGISTRY_REGION}
 REGISTRY_URL=$(ibmcloud cr info | grep -w 'Container Registry' | awk '{print $3;}' | grep -w 'icr')
 
-ibmcloud target -r $IBMCLOUD_TARGET_REGION
+ibmcloud target -r ${IBMCLOUD_TARGET_REGION}
 
 #source <(curl -sSL "https://raw.githubusercontent.com/huayuenh/cssopoc/master/secrets_management.sh")
 #source <(curl -sSL "https://raw.githubusercontent.com/huayuenh/cssopoc/master/signing_utils.sh")
@@ -64,7 +64,7 @@ ls -a /root/.gnupg
 mkdir testsign
 echo "PULL IMAGE"
 skopeo copy docker://us.icr.io/tektonhh/hello-containers-20200625115240818:1-master-972c9342-20200625115851 dir:testsign --src-creds iamapikey:$IBM_CLOUD_API_KEY
-skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/
+#skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/
 echo "BEGIN SIGNING PUSH TO REPO"
 skopeo copy dir:testsign docker://us.icr.io/tektonhh/hello-containers4-20200625115240818:1-master-signed-972c9342-20200625115851 --dest-creds iamapikey:$IBM_CLOUD_API_KEY  --sign-by C61C3D4568ED391949AB8FA3DBF84264585F8C9C
 
