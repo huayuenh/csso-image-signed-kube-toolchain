@@ -30,6 +30,9 @@ spec:
       description: the namespace
     - name: pipeline-debug
       default: "0"
+    - name: key-name
+    - name: vault-instance
+    - name: api-key
   workspaces:
     - name: pipeline-ws
   tasks:
@@ -179,28 +182,51 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
-   - name: signing
-      taskRef:
-        name: iks-deploy-to-kubernetes
+    - name: signing
       runAfter: [vulnerability-advisor]
+      taskRef:
+        name: csso-signing-task
       params:
-        - name: shuttle-properties-file
-          value: "build.properties"
-        - name: cluster-region
+        - name: api-key
+          value: $(params.api-key)
+        - name: vault-instance
+          value: $(params.vault-instance)
+        - name: region
           value: $(params.dev-region)
         - name: resource-group
           value: $(params.dev-resource-group)
-        - name: cluster-name
-          value: $(params.cluster-name)
-        - name: setup-script
-          value: |
-            cat build.properties
-            echo "================"
-        #- name: script
-        #  value: |
-        #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
-        #- name: pipeline-debug
-        #  value: $(params.pipeline-debug)
+        - name: key-name
+          value: $(params.key-name)
+        - name: registry-region
+          value: $(params.registry-region)
+        - name: registry-namespace
+          value: $(params.registry-namespace)
+        - name: image-name
+          value: $(params.image-name)
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+    - name: signing-pre-check
+      runAfter: [signing]
+      taskRef:
+        name: csso-signing-verify-task
+      params:
+        - name: api-key
+          value: $(params.api-key)
+        - name: vault-instance
+          value: $(params.vault-instance)
+        - name: region
+          value: $(params.dev-region)
+        - name: resource-group
+          value: $(params.dev-resource-group)
+        - name: key-name
+          value: $(params.key-name)
+        - name: registry-region
+          value: $(params.registry-region)
+        - name: registry-namespace
+          value: $(params.registry-namespace)
+        - name: image-name
+          value: $(params.image-name)
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
@@ -234,7 +260,7 @@ spec:
     - name: deploy-to-kubernetes
       taskRef:
         name: iks-deploy-to-kubernetes
-      runAfter: [signing]
+      runAfter: [signing-pre-check]
       params:
         - name: shuttle-properties-file
           value: "build.properties"
@@ -299,36 +325,3 @@ spec:
           value: $(tasks.deploy-to-kubernetes.results.resource-group-id)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
-    - name: check-health
-      taskRef:
-        name: iks-deploy-to-kubernetes
-      runAfter: [deploy-to-kubernetes]
-      params:
-        - name: shuttle-properties-file
-          value: "build.properties"
-        - name: cluster-region
-          value: $(params.dev-region)
-        - name: resource-group
-          value: $(params.dev-resource-group)
-        - name: cluster-name
-          value: $(params.cluster-name)
-        - name: setup-script
-          value: |
-            export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
-        - name: script
-          value: |
-            # uncomment to debug the script
-            # set -x
-            # copy the script below into your app code repo (e.g. ./scripts/check_health.sh) and 'source' it from your pipeline job
-            #    source ./scripts/check_health.sh
-            # alternatively, you can source it from online script:
-            #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
-            # ------------------
-            # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
-            # Check liveness and readiness probes to confirm application is healthy
-            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws

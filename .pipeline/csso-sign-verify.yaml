@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: csso-signing-task
+  name: csso-signing-verify-task
 spec:
   params:
     - name: api-key
@@ -40,11 +40,15 @@ spec:
           source /artifacts/build.properties
           IMAGE_TAG=$IMAGE_TAGS
           source <(curl -sSL "https://raw.githubusercontent.com/huayuenh/csso-image-signed-kube-toolchain/master/csso-signing-setup.sh")
-          #Note - signing can be done performed using a single skopeo command
-          echo "PULL IMAGE"
+
+          echo "verify remote"
           skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} dir:${SIGNING_DIR} --src-creds iamapikey:${IBM_CLOUD_API_KEY}
-          echo "BEGIN SIGNING PUSH TO REPO"
-          skopeo copy dir:${SIGNING_DIR} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --dest-creds iamapikey:${IBM_CLOUD_API_KEY}  --sign-by ${SIGNING_KEY}
+          cd ./${SIGNING_DIR}
+          SIGNATURE_FILE=$(ls -t ./ signature* | head -1)
+          #SIGNATURE_FILE=(signature-*[-1])
+          echo "Latest SIGNATURE_FILE ${SIGNATURE_FILE}"
+          cd ../
+          skopeo standalone-verify ./${SIGNING_DIR}/manifest.json ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} ${SIGNING_KEY} ./${SIGNING_DIR}/${SIGNATURE_FILE}
   workspaces:
     - name: artifacts
       description: A workspace backing by a volume
