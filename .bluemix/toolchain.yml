@@ -47,8 +47,8 @@ services:
       legal: true
       kind: ['app']
   pipeline-repo:
-    service_id: >
-      $env.pipeline_type === 'tekton' ? 'githubconsolidated' : '' 
+    service_id: githubconsolidated
+      #$env.pipeline_type === 'tekton' ? 'githubconsolidated' : '' 
     parameters:
       repo_url: $env.repository
       source_repo_url: "https://github.com/proc-org/secure-kube-toolchain"  
@@ -57,8 +57,8 @@ services:
       enable_traceability: false
       kind: ['pipeline']
   tekton-catalog-repo:
-    service_id: >
-      $env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
+    service_id: githubconsolidated
+      #$env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
     parameters:
       repo_url: "https://github.com/open-toolchain/tekton-catalog"
       source_repo_url: "https://github.com/open-toolchain/tekton-catalog"
@@ -73,12 +73,12 @@ services:
         - repo
       name: "{{services.repo.parameters.repo_name}}"
       ui-pipeline: true
-      type: >
-        $env.pipeline_type === 'tekton' ? 'tekton': 'classic'
+      type: tekton
+        #$env.pipeline_type === 'tekton' ? 'tekton': 'classic'
       configuration:
         content:
-          $text: >
-            $env.pipeline_type === 'tekton' ? 'pipeline_tekton.yml' : 'pipeline.yml'
+          $text: pipeline_tekton.yml
+            #$env.pipeline_type === 'tekton' ? 'pipeline_tekton.yml' : 'pipeline.yml'
         env:
           APP_REPO: repo
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
@@ -119,15 +119,15 @@ services:
             } else {
               'grit-or-gitlab-commit';
             }
-        execute: >
-          $env.pipeline_type === 'tekton' ? false : true
+        execute: false
+          #$env.pipeline_type === 'tekton' ? false : true
   webide:
     service_id: orion
 form:
   pipeline:
     parameters:
       app-name: "{{services.repo.parameters.repo_name}}"
-      prod-cluster-namespace: >
-        $env.pipeline_type === 'tekton' ? 'default' : 'prod'
+      prod-cluster-namespace: default
+        #$env.pipeline_type === 'tekton' ? 'default' : 'prod'
     schema:
       $ref: deploy.json
