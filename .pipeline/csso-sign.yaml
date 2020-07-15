@@ -41,10 +41,12 @@ spec:
           IMAGE_TAG=$IMAGE_TAGS
           source <(curl -sSL "https://raw.githubusercontent.com/huayuenh/csso-image-signed-kube-toolchain/master/csso-signing-setup.sh")
           #Note - signing can be done performed using a single skopeo command
-          echo "PULL IMAGE"
-          skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} dir:${SIGNING_DIR} --src-creds iamapikey:${IBM_CLOUD_API_KEY}
-          echo "BEGIN SIGNING PUSH TO REPO"
-          skopeo copy dir:${SIGNING_DIR} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --dest-creds iamapikey:${IBM_CLOUD_API_KEY}  --sign-by ${SIGNING_KEY}
+          #echo "PULL IMAGE"
+          #skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} dir:${SIGNING_DIR} --src-creds iamapikey:${IBM_CLOUD_API_KEY}
+          #echo "BEGIN SIGNING PUSH TO REPO"
+          #skopeo copy dir:${SIGNING_DIR} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --dest-creds iamapikey:${IBM_CLOUD_API_KEY}  --sign-by ${SIGNING_KEY}
+          #sudo skopeo copy docker://us.icr.io/<repo:image:tag> docker://us.icr.io/<repo:newimage:tag> --dest-creds iamapikey:key --src-creds iamapikey: key --sign-by <gpgkeyfingerprint>
+          skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --dest-creds iamapikey:${IBM_CLOUD_API_KEY} --src-creds iamapikey: ${IBM_CLOUD_API_KEY} --sign-by ${SIGNING_KEY}
   workspaces:
     - name: artifacts
       description: A workspace backing by a volume
