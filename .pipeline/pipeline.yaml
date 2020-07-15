@@ -206,30 +206,6 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
-    - name: signing-pre-check
-      runAfter: [signing]
-      taskRef:
-        name: csso-signing-verify-task
-      params:
-        - name: api-key
-          value: $(params.api-key)
-        - name: vault-instance
-          value: $(params.vault-instance)
-        - name: region
-          value: $(params.dev-region)
-        - name: resource-group
-          value: $(params.dev-resource-group)
-        - name: key-name
-          value: $(params.key-name)
-        - name: registry-region
-          value: $(params.registry-region)
-        - name: registry-namespace
-          value: $(params.registry-namespace)
-        - name: image-name
-          value: $(params.image-name)
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
     - name: publish-doi-va-scan-record
       runAfter: [vulnerability-advisor]
       taskRef:
@@ -260,7 +236,7 @@ spec:
     - name: deploy-to-kubernetes
       taskRef:
         name: iks-deploy-to-kubernetes
-      runAfter: [signing-pre-check]
+      runAfter: [signing]
       params:
         - name: shuttle-properties-file
           value: "build.properties"
