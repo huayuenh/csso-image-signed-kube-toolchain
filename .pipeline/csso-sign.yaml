@@ -46,7 +46,7 @@ spec:
           #echo "BEGIN SIGNING PUSH TO REPO"
           #skopeo copy dir:${SIGNING_DIR} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --dest-creds iamapikey:${IBM_CLOUD_API_KEY}  --sign-by ${SIGNING_KEY}
           #sudo skopeo copy docker://us.icr.io/<repo:image:tag> docker://us.icr.io/<repo:newimage:tag> --dest-creds iamapikey:key --src-creds iamapikey: key --sign-by <gpgkeyfingerprint>
-          skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --dest-creds iamapikey:${IBM_CLOUD_API_KEY} --src-creds iamapikey: ${IBM_CLOUD_API_KEY} --sign-by ${SIGNING_KEY}
+          skopeo copy docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} docker://${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --dest-creds iamapikey:${IBM_CLOUD_API_KEY} --src-creds iamapikey:${IBM_CLOUD_API_KEY} --sign-by ${SIGNING_KEY}
   workspaces:
     - name: artifacts
       description: A workspace backing by a volume
