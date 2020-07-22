@@ -5,7 +5,12 @@ metadata:
   name: csso-signing-task
 spec:
   params:
-    - name: api-key
+    - name: continuous-delivery-context-secret
+      description: name of the configmap containing the continuous delivery pipeline context secrets
+      default: secure-properties
+    - name: kubernetes-service-apikey-secret-key
+      description: field in the secret that contains the api key used to login to ibmcloud kubernetes service
+      default: apikey
     - name: vault-instance
     - name: key-name
     - name: region
@@ -17,8 +22,6 @@ spec:
     - name: sign-image
       image: huayuenh/csso_client:latest
       env:
-        - name: IBM_CLOUD_API_KEY
-          value: $(params.api-key)
         - name: VAULT_INSTANCE
           value: $(params.vault-instance)
         - name: KEY_NAME
@@ -35,6 +38,11 @@ spec:
           value: $(params.image-name)
         - name: REGION
           value: $(params.region)
+        - name: IBM_CLOUD_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $(params.continuous-delivery-context-secret)
+              key: $(params.kubernetes-service-apikey-secret-key)
       script: |
           #!/bin/bash
           source /artifacts/build.properties
