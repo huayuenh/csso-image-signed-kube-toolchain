@@ -187,10 +187,6 @@ spec:
       taskRef:
         name: csso-signing-task
       params:
-        - name: continuous-delivery-context-secret
-          value: "secure-properties"
-        - name: ibmcloud-apikey-secret-key
-          value: "toolchain-apikey"
         - name: vault-instance
           value: $(params.vault-instance)
         - name: region
