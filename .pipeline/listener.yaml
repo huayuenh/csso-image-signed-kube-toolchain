@@ -33,6 +33,7 @@ spec:
     - name: key-name
     - name: vault-instance
     - name: apikey
+    - name: demo
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -85,6 +86,8 @@ spec:
             value: $(params.vault-instance)
           - name: api-key
             value: $(params.apikey)
+          - name: demo
+            value: $(params.demo)
         workspaces:
           - name: pipeline-ws
             persistentVolumeClaim:

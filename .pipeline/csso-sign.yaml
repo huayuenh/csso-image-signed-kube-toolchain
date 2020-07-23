@@ -18,6 +18,7 @@ spec:
     - name: registry-region
     - name: registry-namespace
     - name: image-name
+    - name: demo
   steps:
     - name: sign-image
       image: huayuenh/csso_client:latest
@@ -38,6 +39,8 @@ spec:
           value: $(params.image-name)
         - name: REGION
           value: $(params.region)
+        - name: DEMO
+          value: $(params.demo)
         - name: IBM_CLOUD_API_KEY
           valueFrom:
             secretKeyRef:
