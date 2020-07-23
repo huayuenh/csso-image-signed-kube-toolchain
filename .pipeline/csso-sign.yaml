@@ -50,6 +50,7 @@ spec:
           #!/bin/bash
           source /artifacts/build.properties
           IMAGE_TAG=$IMAGE_TAGS
+          cat $DEMO
           #Required parameters
           #VAULT_INSTANCE - name of the Key-Protect instance
           #KEY_NAME - name of the key entry in Key-Protect key name must match CSSO cert name
