@@ -8,6 +8,8 @@ Users can register here:
 
 [[https://pgawdccosig01.sl.bluecloud.ibm.com/]{.ul}](https://pgawdccosig01.sl.bluecloud.ibm.com/)
 
+![](/Users/huayuenhui/projects/tekton-opentoolchain/csso-image-signed-kube-toolchain/markdown/Picture 1.png)
+
 ![A screenshot of a computer Description automatically
 generated](media/image1.png){width="6.268055555555556in"
 height="3.6430555555555557in"}
