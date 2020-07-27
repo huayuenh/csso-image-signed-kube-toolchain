@@ -1,6 +1,6 @@
 **CISO Code Signing Service and Key Setup**
 
-Registering
+***Registering***
 
 The compliance-ci-toolchain leverages the CISO services to sign images.
 The toolchain admin needs to be registered as a team member on CISO.
@@ -8,32 +8,24 @@ Users can register here:
 
 [[https://pgawdccosig01.sl.bluecloud.ibm.com/]{.ul}](https://pgawdccosig01.sl.bluecloud.ibm.com/)
 
-![](/Users/huayuenhui/projects/tekton-opentoolchain/csso-image-signed-kube-toolchain/markdown/Picture 1.png)
+![](https://github.ibm.com/one-pipeline/docs/blob/signingdocs/assets/signing-setup/ciso/landingpage.png)
 
-![A screenshot of a computer Description automatically
-generated](media/image1.png){width="6.268055555555556in"
-height="3.6430555555555557in"}
+
 
 Once registered visit the page again and log in.
 
 At this point you can request a certificate or have an existing one
 uploaded to the HSM (Hardware Security Module)
 
-![A screenshot of a cell phone Description automatically
-generated](media/image2.png){width="6.268055555555556in"
-height="1.9493055555555556in"}
+![](https://github.ibm.com/one-pipeline/docs/blob/signingdocs/assets/signing-setup/ciso/certrequest.png)
 
 When ready click on the Local Sign button
 
-![A screenshot of a cell phone Description automatically
-generated](media/image3.png){width="6.268055555555556in"
-height="2.377083333333333in"}
+![](https://github.ibm.com/one-pipeline/docs/blob/signingdocs/assets/signing-setup/ciso/localsign.png)
 
 Select the following options:
 
-![A screenshot of a cell phone Description automatically
-generated](media/image4.png){width="6.268055555555556in"
-height="3.6618055555555555in"}
+![](https://github.ibm.com/one-pipeline/docs/blob/signingdocs/assets/signing-setup/ciso/installer.png)
 
 Click Review Parameters and generate your client bundle.
 
@@ -41,7 +33,7 @@ Extract the contents of the generated .tar file and look for the .pfx
 file. This certificate acts as the key to the users partition. This key
 needs to be saved in a means that can be accessed by a pipeline run.
 
-Saving the certificate to Key Protect
+***Saving the certificate to Key Protect***
 
 Visit
 [[https://cloud.ibm.com/catalog/services/key-protect]{.ul}](https://cloud.ibm.com/catalog/services/key-protect)
@@ -66,9 +58,7 @@ and click the Key Protect instance that was created.
 
 Click the Add Key button
 
-![A screenshot of a social media post Description automatically
-generated](media/image5.png){width="6.268055555555556in"
-height="2.26875in"}
+![](https://github.ibm.com/one-pipeline/docs/blob/signingdocs/assets/signing-setup/ciso/create_key.png)
 
 On the following dialog, select Import Key and Standard Key.
 
@@ -77,9 +67,7 @@ key material field.
 
 Click import key
 
-![A screenshot of a cell phone Description automatically
-generated](media/image6.png){width="6.268055555555556in"
-height="4.7972222222222225in"}
+![](https://github.ibm.com/one-pipeline/docs/blob/signingdocs/assets/signing-setup/ciso/set_key_data.png)
 
 Make note of the Key-protect service instance name as well as the key
 name as these will be required when configuring the Compliance Template
