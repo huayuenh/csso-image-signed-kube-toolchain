@@ -1,6 +1,6 @@
-**CISO Code Signing Service and Key Setup**
+#### CISO Code Signing Service and Key Setup
 
-***Registering***
+### Registering
 
 The compliance-ci-toolchain leverages the CISO services to sign images.
 The toolchain admin needs to be registered as a team member on CISO.
